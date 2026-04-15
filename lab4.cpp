@@ -32,6 +32,40 @@ private:
     CityNode* head;   
     CityNode* tail;   
 
+    int getValidatedPopulation() {
+        int population;
+        bool valid = false;
+
+        do {
+            cout << "Количество жителей: ";
+            cin >> population;
+
+            if (cin.fail()) {
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cout << "Ошибка: Введите число!\n";
+            }
+            else if (population <= 0) {
+                cout << "Ошибка: Население должно быть положительным числом!\n";
+            }
+            else {
+                valid = true;
+            }
+        } while (!valid);
+
+        cin.ignore();
+        return population;
+    }
+
+    bool isValidString(const string& str) {
+        for (char c : str) {
+            if (!isspace(c)) {
+                return true; 
+            }
+        }
+        return false;
+    }
+
 public:
     DoublyLinkedList() {
         head = nullptr;
@@ -81,19 +115,33 @@ public:
         cout << "Введите 0 в названии города для завершения ввода\n\n";
 
         while (true) {
-            cout << "Название города: ";
-            getline(cin, city);
+            do {
+                cout << "Название города: ";
+                getline(cin, city);
+
+                if (city == "0") {
+                    break;
+                }
+
+                if (!isValidString(city)) {
+                    cout << "Ошибка: Название города не может быть пустым!\n";
+                }
+            } while (city != "0" && !isValidString(city));
 
             if (city == "0") {
                 break;
             }
 
-            cout << "Название региона: ";
-            getline(cin, region);
+            do {
+                cout << "Название региона: ";
+                getline(cin, region);
 
-            cout << "Количество жителей: ";
-            cin >> population;
-            cin.ignore();
+                if (!isValidString(region)) {
+                    cout << "Ошибка: Название региона не может быть пустым!\n";
+                }
+            } while (!isValidString(region));
+
+            population = getValidatedPopulation();
 
             append(city, region, population);
             cout << "Город добавлен!\n\n";
